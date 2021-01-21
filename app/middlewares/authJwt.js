@@ -38,13 +38,13 @@ isAdmin = (req, res, next) => {
             }
 
             for (i of roles) {
-                if (roles.name === "admin") {
+                if (i.name === "admin") {
                     next();
                     return;
                 }
             }
 
-            res.send(403).send({message: "Require Admin Role!"});
+            res.status(403).send({message: "Require Admin Role!"});
             return;
         }
         )
@@ -61,21 +61,21 @@ isModerator = (req, res, next) => {
 
         Role.find({
             _id: {$in: user.roles}
-        }, (err, roles) => {
-            if (err) {
-                res.status(500).send({message: err});
-                return;
-            }
-
-            for (i of roles) {
-                if (roles.name === "moderator") {
-                    next();
+            }, (err, roles) => {
+                if (err) {
+                    res.status(500).send({message: err});
                     return;
                 }
-            }
 
-            res.send(403).send({message: "Require Admin Role!"});
-            return;
+                for (i of roles) {
+                    if (i.name === "moderator") {
+                        next();
+                        return;
+                    }
+                }
+
+                res.status(403).send({message: "Require Admin Role!"});
+                return;
         }
         )
     })

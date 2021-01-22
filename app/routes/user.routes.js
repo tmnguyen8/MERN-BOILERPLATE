@@ -10,11 +10,11 @@ module.exports = (app) => {
         next();
     });
 
-    app.get("/api/test/all", controller.allAccess);
+    app.get("/api/page/all", controller.allAccess);
 
-    app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+    app.get("/api/page/user", [authJwt.verifyToken], controller.userBoard);
 
-    app.get("/api/test/mod", [authJwt.verifyToken, authJwt.isModerator], controller.moderatorBoard);
+    app.get("/api/page/mod", [authJwt.verifyToken, authJwt.isModerator], controller.moderatorBoard);
 
-    app.get("/api/test/admin", [authJwt.verifyToken, authJwt.isAdmin], controller.adminBoard);
+    app.get("/api/page/admin", [authJwt.verifyToken, authJwt.isAdmin], controller.adminBoard);
 }

@@ -1,6 +1,6 @@
 // helper function to get x-access-token header with access token
-export default authHeader = () => {
-    const user = jSON.parse(localStorage.getItem("user"));
+const authHeader = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (user && user.accessToken) {
         return {"x-access-token": user.accessToken};
@@ -8,3 +8,5 @@ export default authHeader = () => {
         return {}
     }
 }
+
+export default authHeader;

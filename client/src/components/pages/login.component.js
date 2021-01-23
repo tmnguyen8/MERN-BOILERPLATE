@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
@@ -15,7 +15,7 @@ const required = (value) => {
     }
 }
 
-export default class Login extends Component {
+export default class Login extends React.Component {
     state = {
         username: "",
         password: "",
@@ -23,19 +23,19 @@ export default class Login extends Component {
         message: ""
     }
 
-    onChangeUsername(e) {
+    onChangeUsername = (e) => {
         this.setState({
             username: e.target.value
         })
     }
 
-    onChangePassword(e) {
+    onChangePassword= (e) => {
         this.setState({
             password: e.target.value
         })
     }
 
-    handleLogin(e) {
+    handleLogin = (e) => {
         e.preventDefault();
         this.setState({
             message: "",

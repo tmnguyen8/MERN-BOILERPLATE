@@ -1,9 +1,8 @@
 import axios from "axios";
-import { authJwt } from "../../../app/middlewares";
-import authHeader from "./auth-header";
+import authHeader from "./auth.header";
 
 // Must be the same as Backend User Route
-const API_URL = "/api/page";
+const API_URL = "http://localhost:8080/api/page";
 
 class UserService {
     getPublicContent() {

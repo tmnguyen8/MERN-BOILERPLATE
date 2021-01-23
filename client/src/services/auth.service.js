@@ -1,9 +1,10 @@
 import axios from "axios";
 
-const API_URL = "/api/auth";
+const API_URL = "http://localhost:8080/api/auth";
 
 class AuthService  {
-    login(username, password) {
+    login = (username, password) => {
+        console.log("testing login from client")
         return axios
                 .post(API_URL + "/signin", {username, password})
                 .then(res => {
@@ -15,15 +16,15 @@ class AuthService  {
                 .catch(err => console.log(err))
     }
 
-    logout() {
+    logout = () => {
         localStorage.removeItem("user");
     }
 
-    register(username, email, password) {
+    register = (username, email, password) => {
         return axios.post(API_URL + "/signup", {username, email, password})
     }
 
-    getCurrentUser() {
+    getCurrentUser = () => {
         return JSON.parse(localStorage.getItem("user"))
     }
 

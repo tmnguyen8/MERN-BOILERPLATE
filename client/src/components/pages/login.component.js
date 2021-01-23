@@ -24,7 +24,6 @@ export default class Login extends React.Component {
     }
 
     onChangeUsername = (e) => {
-        console.log(e.target.value)
         this.setState({
             username: e.target.value
         })
@@ -71,7 +70,7 @@ export default class Login extends React.Component {
             <div className="col-md-12">
                 <div className="card card-container">
                     <img 
-                        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                        src="/assets/profile_avatar.png"
                         alt="profile-img"
                         className="profile-img-card"
                     />

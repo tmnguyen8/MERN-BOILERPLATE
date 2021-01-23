@@ -12,6 +12,7 @@ import Profile from "./components/pages/profile.component";
 import BoardUser from "./components/pages/board.user";
 import BoardModerator from "./components/pages/board.moderator";
 import BoardAdmin from "./components/pages/board.admin";
+import Navbar from "./components/navbar/navbar.component";
 
 class App extends Component {
   constructor(props) {
@@ -50,71 +51,12 @@ class App extends Component {
     return (
       <div>
       <Router >
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/"} className="navbar-brand">
-            MERN STACK BOILERPLATE
-          </Link>
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/home"} className="nav-link">
-                Home
-              </Link>
-            </li>
-
-            {showModeratorBoard && (
-              <li className="nav-item">
-                <Link to={"/mod"} className="nav-link">
-                  Moderator Board
-                </Link>
-              </li>
-            )}
-
-            {showAdminBoard && (
-              <li className="nav-item">
-                <Link to={"/admin"} className="nav-link">
-                  Admin Board
-                </Link>
-              </li>
-            )}
-
-            {currentUser && (
-              <li className="nav-item">
-                <Link to={"/user"} className="nav-link">
-                  User
-                </Link>
-              </li>
-            )}
-          </div>
-
-          {currentUser ? (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/profile"} className="nav-link">
-                  {currentUser.username}
-                </Link>
-              </li>
-              <li className="nav-item">
-                <a href="/login" className="nav-link" onClick={this.logOut}>
-                  LogOut
-                </a>
-              </li>
-            </div>
-          ) : (
-            <div className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link to={"/login"} className="nav-link">
-                  Login
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link to={"/register"} className="nav-link">
-                  Sign Up
-                </Link>
-              </li>
-            </div>
-          )}
-        </nav>
+        <Navbar 
+          showModeratorBoard = {showModeratorBoard}
+          showAdminBoard = {showAdminBoard}
+          currentUser = {currentUser}
+          logOut = {this.logOut}
+        />
 
         <div className="container mt-3">
           <Switch>

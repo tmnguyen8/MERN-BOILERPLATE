@@ -36,8 +36,7 @@ class App extends Component {
             });
         } else {
           this.logOut();
-        }
-            
+        } 
     } 
   }
 

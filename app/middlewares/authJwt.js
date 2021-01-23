@@ -53,6 +53,7 @@ isAdmin = (req, res, next) => {
 
 // Verify if the user if moderator
 isModerator = (req, res, next) => {
+    console.log("hitting page/mod", req.headers)
     User.findById(req.userId).exec((err, user) => {
         if(err) {
             res.status(500).send({message: err});

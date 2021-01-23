@@ -1,12 +1,11 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/auth";
+const API_URL = "/api/auth";
 
 class AuthService  {
     login = (username, password) => {
-        console.log("testing login from client")
         return axios
-                .post(API_URL + "/signin", {username, password})
+                .post(API_URL + "/signin", {username: username, password: password})
                 .then(res => {
                     if (res.data.accessToken) {
                         localStorage.setItem("user", JSON.stringify(res.data))

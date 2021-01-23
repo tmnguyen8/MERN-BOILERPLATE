@@ -18,7 +18,7 @@ export default class BoardMod extends Component {
     render() {
         return (
             <div className="container">
-                <header className="jumbtron">
+                <header className="jumbotron">
                     <h3>{this.state.content}</h3>
                 </header>
             </div>

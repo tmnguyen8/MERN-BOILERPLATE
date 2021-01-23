@@ -24,12 +24,13 @@ export default class Login extends React.Component {
     }
 
     onChangeUsername = (e) => {
+        console.log(e.target.value)
         this.setState({
             username: e.target.value
         })
     }
 
-    onChangePassword= (e) => {
+    onChangePassword = (e) => {
         this.setState({
             password: e.target.value
         })
@@ -49,7 +50,7 @@ export default class Login extends React.Component {
                 .login(this.state.username, this.state.password)
                 .then(() => {
                     this.props.history.push("/profile");
-                    this.windlow.location.reload();
+                    window.location.reload();
                 }, err => {
                     const resMessage = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
 
@@ -75,7 +76,7 @@ export default class Login extends React.Component {
                         className="profile-img-card"
                     />
                     <Form  
-                        onSubmit={() => this.handleLogin()}
+                        onSubmit={e => this.handleLogin(e)}
                         ref={c => {this.form = c}}
                     >
                         {/* User Input */}
@@ -86,7 +87,7 @@ export default class Login extends React.Component {
                                 className="form-control"
                                 name="username"
                                 value={this.state.username}
-                                onChange={this.onChangeUsername}
+                                onChange={(e) => this.onChangeUsername(e)}
                                 validations={[required]}
                             />
                         </div>

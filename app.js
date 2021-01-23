@@ -1,11 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const db = require("./app/models");
-const dbConfig = require("./app/config/db.config");
+const db = require("./server/models");
+const dbConfig = require("./server/config/db.config");
 const Role = db.role;
 // initialize Roles
-const initial = require("./app/script/intitialize");
+const initial = require("./server/script/intitialize");
 
 const app = express();
 
@@ -18,6 +18,11 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({extended: true}));
+
+// Serve up static assets (production use client/build)
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+}
 
 // Database
 
@@ -34,14 +39,9 @@ db.mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
     // process.exit()
 })
 
-// Routes
-
-app.get("/", (req, res) => {
-    res.json({message: "welcome to my application"});
-});
-
-require("./app/routes/auth.routes")(app);
-require("./app/routes/user.routes")(app);
+// // Routes
+require("./server/routes/auth.routes")(app);
+require("./server/routes/user.routes")(app);
 
 const PORT = process.env.PORT || 8080;
 

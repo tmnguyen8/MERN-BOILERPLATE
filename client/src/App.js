@@ -27,14 +27,18 @@ class App extends Component {
 
   componentDidMount() {
     const user = AuthService.getCurrentUser();
-
     if (user) {
-      this.setState({
-        currentUser: user,
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
-      });
-    }
+        if (new Date(user.expiredInDate) > new Date()) {
+          this.setState({
+              currentUser: user,
+              showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
+              showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+            });
+        } else {
+          this.logOut();
+        }
+            
+    } 
   }
 
   logOut() {

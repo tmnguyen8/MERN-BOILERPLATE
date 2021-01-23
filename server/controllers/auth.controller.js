@@ -6,6 +6,12 @@ const Role = db.role;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+// Adding Time to Date
+Date.prototype.addHours = function(h) {
+    this.setTime(this.getTime() + (h*60*60*1000));
+    return this;
+}
+
 // Signup controller: create user in DB default role as "user" if not specified
 exports.signup = (req, res) => {
     const user = new User({
@@ -89,7 +95,7 @@ exports.signin = (req, res) => {
                 });
             }
 
-            const token = jwt.sign({id: user.id}, config.secret, {expiresIn: 86400 }) //expires in 24 hours
+            const token = jwt.sign({id: user.id}, config.secret, {expiresIn: "1d" }) //expires in 24 hours
 
             var authorities = [];
 
@@ -102,7 +108,8 @@ exports.signin = (req, res) => {
                 username: user.username,
                 email: user.email,
                 roles: authorities,
-                accessToken: token
+                accessToken: token,
+                expiredInDate: new Date().addHours(24)
             });
         });
 }

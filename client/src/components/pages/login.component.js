@@ -10,10 +10,11 @@ export default function Login() {
     //     loading: false,
     //     message: ""
     // }
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, errors } = useForm();
 
     const handleLogin = (data) => {
         console.log(data)
+        console.log(errors)
         // e.preventDefault();
         // this.setState({
         //     message: "",
@@ -58,8 +59,11 @@ export default function Login() {
                                 type="text"
                                 className="form-control"
                                 name="username"
-                                ref = { register({required: true}) }
+                                ref = { register({
+                                    required: true
+                                    }) }
                             />
+                            {errors.username && <p>This is required</p>}
                         </div>
 
                         {/* Password Input */}
@@ -69,8 +73,13 @@ export default function Login() {
                                 type="text"
                                 className="form-control"
                                 name="password"
-                                ref = { register({required: true})}
+                                ref = { register({
+                                    required: true,
+                                    minLength: 6
+                                    })}
                             />
+                            {errors.password && <p>This is required</p>}
+                            {errors.password && errors.password.type === "minLength" && (<p>Minimum Length of 6</p>)}
                         </div>
 
                         {/* Login Button */}

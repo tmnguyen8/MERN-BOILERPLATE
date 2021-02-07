@@ -1,71 +1,47 @@
-import React from 'react';
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
+import React, { useRef } from 'react';
+import {useForm} from "react-hook-form";
 
 import AuthService from "../../services/auth.service";
 
-const required = (value) => {
-    if (!value) {
-        return (
-            <div className="alert alert-danger" role="alert">
-                This field is required!
-            </div>
-        )
-    }
-}
+export default function Login() {
+    // const state = {
+    //     username: "",
+    //     password: "",
+    //     loading: false,
+    //     message: ""
+    // }
+    const { register, handleSubmit } = useForm();
 
-export default class Login extends React.Component {
-    state = {
-        username: "",
-        password: "",
-        loading: false,
-        message: ""
-    }
+    const handleLogin = (data) => {
+        console.log(data)
+        // e.preventDefault();
+        // this.setState({
+        //     message: "",
+        //     loading: true
+        // });
 
-    onChangeUsername = (e) => {
-        this.setState({
-            username: e.target.value
-        })
-    }
+        // if (this.checkBtn.context._errors.length === 0) {
+        //     AuthService
+        //         .login(this.state.username, this.state.password)
+        //         .then(() => {
+        //             this.props.history.push("/profile");
+        //             window.location.reload();
+        //         }, err => {
+        //             const resMessage = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
 
-    onChangePassword = (e) => {
-        this.setState({
-            password: e.target.value
-        })
-    }
-
-    handleLogin = (e) => {
-        e.preventDefault();
-        this.setState({
-            message: "",
-            loading: true
-        });
-
-        this.form.validateAll();
-
-        if (this.checkBtn.context._errors.length === 0) {
-            AuthService
-                .login(this.state.username, this.state.password)
-                .then(() => {
-                    this.props.history.push("/profile");
-                    window.location.reload();
-                }, err => {
-                    const resMessage = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
-
-                    this.setState({
-                        loading: false,
-                        message: resMessage
-                    })
-                })
-        } else {
-            this.setState({
-                loading: false
-            })
-        }
+        //             this.setState({
+        //                 loading: false,
+        //                 message: resMessage
+        //             })
+        //         })
+        // } else {
+        //     this.setState({
+        //         loading: false
+        //     })
+        // }
     }
 
-    render() {
+    
         return (
             <div className="col-md-12">
                 <div className="card card-container">
@@ -74,33 +50,26 @@ export default class Login extends React.Component {
                         alt="profile-img"
                         className="profile-img-card"
                     />
-                    <Form  
-                        onSubmit={e => this.handleLogin(e)}
-                        ref={c => {this.form = c}}
-                    >
+                    <form  onSubmit={handleSubmit(handleLogin)}>
                         {/* User Input */}
                         <div className="form-group">
                             <label htmlFor="username">Username</label>
-                            <Input 
+                            <input 
                                 type="text"
                                 className="form-control"
                                 name="username"
-                                value={this.state.username}
-                                onChange={(e) => this.onChangeUsername(e)}
-                                validations={[required]}
+                                ref = { register({required: true}) }
                             />
                         </div>
 
                         {/* Password Input */}
                         <div className="form-group">
                             <label htmlFor="password">Password</label>
-                            <Input 
+                            <input 
                                 type="text"
                                 className="form-control"
                                 name="password"
-                                value={this.state.password}
-                                onChange={this.onChangePassword}
-                                validations={[required]}
+                                ref = { register({required: true})}
                             />
                         </div>
 
@@ -108,19 +77,17 @@ export default class Login extends React.Component {
                         <div className="form-group">
                             <button
                                 className="btn btn-primary btn-block"
-                                disabled={this.state.loading}
+                                // disabled={}
                             >
-                                {this.state.loading && (<span className="spinner-border spinner-border-sm"></span>)}
+                                {
+                                    // this.state.loading && (<span className="spinner-border spinner-border-sm"></span>)
+                                }
                                 <span>Login</span>
                             </button>
                         </div>
-                        <CheckButton 
-                            style={{display: "none"}}
-                            ref={c => {this.checkBtn = c}}
-                        />
-                    </Form>
+                    </form>
                 </div>                
             </div>
         )
-    }
+    
 }

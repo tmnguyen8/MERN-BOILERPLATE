@@ -1,45 +1,42 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {useForm} from "react-hook-form";
 
 import AuthService from "../../services/auth.service";
 
-export default function Login() {
-    // const state = {
-    //     username: "",
-    //     password: "",
-    //     loading: false,
-    //     message: ""
-    // }
+export default function Login(props) {
+    // STATES
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+    // REACT-HOOK-FORM FUNCTIONS
     const { register, handleSubmit, errors } = useForm();
 
-    const handleLogin = (data) => {
-        console.log(data)
-        console.log(errors)
+    const handleLogin = async (data) => {
+        // console.log(data)
+        // console.log("error: ", errors)
         // e.preventDefault();
-        // this.setState({
-        //     message: "",
-        //     loading: true
-        // });
+        if (!errors) {
+            setLoading(true)
+            setMessage("")
+        }
 
-        // if (this.checkBtn.context._errors.length === 0) {
-        //     AuthService
-        //         .login(this.state.username, this.state.password)
-        //         .then(() => {
-        //             this.props.history.push("/profile");
-        //             window.location.reload();
-        //         }, err => {
-        //             const resMessage = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
+        await AuthService
+            .login(data.username, data.password)
+            .then((res) => {
+                if (res.accessToken) {
+                    props.history.push("/profile");
+                    window.location.reload();
+                } else {
+                    setMessage(res.message)
+                }
+                setLoading(false)
 
-        //             this.setState({
-        //                 loading: false,
-        //                 message: resMessage
-        //             })
-        //         })
-        // } else {
-        //     this.setState({
-        //         loading: false
-        //     })
-        // }
+            }, err => {
+                // console.log("myerror", err)
+                const resMessage = (err.response && err.response.data && err.response.data.message) || err.message || err.toString();
+                // console.log("Error", resMessage)
+                setLoading(false)
+                setMessage(resMessage)
+            })
     }
 
     
@@ -74,7 +71,7 @@ export default function Login() {
                                 className="form-control"
                                 name="password"
                                 ref = { register({
-                                    required: true,
+                                    required: "Password is required",
                                     minLength: 6
                                     })}
                             />
@@ -86,15 +83,16 @@ export default function Login() {
                         <div className="form-group">
                             <button
                                 className="btn btn-primary btn-block"
-                                // disabled={}
+                                disabled={loading}
                             >
                                 {
-                                    // this.state.loading && (<span className="spinner-border spinner-border-sm"></span>)
+                                    loading && (<span className="spinner-border spinner-border-sm"></span>)
                                 }
                                 <span>Login</span>
                             </button>
                         </div>
                     </form>
+                    {message? <p>{message}</p>: null}
                 </div>                
             </div>
         )

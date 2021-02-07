@@ -71,45 +71,85 @@ exports.signup = (req, res) => {
 // if passwords match, generate a token using jsonwebtoken, return user info and access token
 // token are valid for 24 hours
 exports.signin = (req, res) => {
-    User.findOne({username: req.body.username})
-        .populate("roles", "-__v")
-        .exec((err, user) => {
+    User.findOne({username: req.body.username}, (err, user) => {
             if (err) {
-                res.status(500).send({message: err});
-                return;
+                return res.status(500).send({message: err});;
             }
-
             if (!user) {
+                // res.send({message: "User Not Found."});
                 return res.status(404).send({message: "User Not Found."});
-            }
 
-            var passwordIsValid = bcrypt.compareSync(
-                req.body.password,
-                user.password
-            );
-
-            if (!passwordIsValid) {
-                return res.status(401).send({
-                    accessToken: null,
-                    message: "Invalid Password!"
+            } else if (user && (!err)) {
+                var passwordIsValid = bcrypt.compareSync(
+                    req.body.password,
+                    user.password
+                );
+    
+                if (!passwordIsValid) {
+                    return res.status(401).send({
+                        accessToken: null,
+                        message: "Invalid Password!"
+                    });
+                }
+    
+                const token = jwt.sign({id: user.id}, config.secret, {expiresIn: "1d" }) //expires in 24 hours
+    
+                var authorities = [];
+    
+                for (let i=0; i < user.roles.length; i++) {
+                    authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+                }
+    
+                res.status(200).send({
+                    id: user._id,
+                    username: user.username,
+                    email: user.email,
+                    roles: authorities,
+                    accessToken: token,
+                    expiredInDate: new Date().addHours(24)
                 });
             }
+        })
+        .populate("roles", "-__v")
+        // .exec((err, user) => {
+        //     if (err) {
+        //         res.status(500).send({message: err});
+        //         return;
+        //     }
+        //     // console.log(user)
+        //     // console.log("error:", err)
+        //     if (!user) {
+                
+        //         return res.status(404).send({message: "User Not Found."});
+        //     }
 
-            const token = jwt.sign({id: user.id}, config.secret, {expiresIn: "1d" }) //expires in 24 hours
+        //     var passwordIsValid = bcrypt.compareSync(
+        //         req.body.password,
+        //         user.password
+        //     );
 
-            var authorities = [];
+        //     if (!passwordIsValid) {
+        //         return res.status(401).send({
+        //             accessToken: null,
+        //             message: "Invalid Password!"
+        //         });
+        //     }
 
-            for (let i=0; i < user.roles.length; i++) {
-                authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-            }
+        //     const token = jwt.sign({id: user.id}, config.secret, {expiresIn: "1d" }) //expires in 24 hours
 
-            res.status(200).send({
-                id: user._id,
-                username: user.username,
-                email: user.email,
-                roles: authorities,
-                accessToken: token,
-                expiredInDate: new Date().addHours(24)
-            });
-        });
+        //     var authorities = [];
+
+        //     for (let i=0; i < user.roles.length; i++) {
+        //         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+        //     }
+
+        //     res.status(200).send({
+        //         id: user._id,
+        //         username: user.username,
+        //         email: user.email,
+        //         roles: authorities,
+        //         accessToken: token,
+        //         expiredInDate: new Date().addHours(24)
+        //     });
+        // });
 }

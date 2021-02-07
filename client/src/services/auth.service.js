@@ -5,14 +5,22 @@ const API_URL = "/api/auth";
 class AuthService  {
     login = (username, password) => {
         return axios
-                .post(API_URL + "/signin", {username: username, password: password})
+                .post(API_URL + "/signin", {username: username, password: password}, (err)=> console.log(err))
                 .then(res => {
                     if (res.data.accessToken) {
                         localStorage.setItem("user", JSON.stringify(res.data))
                     }
                     return res.data;
                 })
-                .catch(err => console.log(err))
+                .catch(err => {
+                    if (err.response.status === 404) {
+                        return {message: "User Not Found."}
+                    } else if (err.response.status === 401) {
+                        return ({message: "Invalid Password!"})
+                    } else {
+                        return ({message: "Oops! Something went wrong!"})
+                    }
+                })
     }
 
     logout = () => {
